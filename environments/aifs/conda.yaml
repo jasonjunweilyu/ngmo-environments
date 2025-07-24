@@ -3,10 +3,12 @@ channels:
 dependencies:
   - cuda
   - cuda-version=12.8
-    # - earthkit-data=0.11.4 # not recognised by pip packages
-  - earthkit-geo =0.3.0
-  - ecmwf-opendata =0.3.19
-  - flash-attn =2.7.2
+  - ecmwf-opendata=0.3.20
+  - earthkit-data=0.15.0
+  - earthkit-utils=0.0.1
+  - flash-attn=2.7.2
+# h3 is anemoi_graphs dependency. We only need the python-binding and so h3-py. pip has problem with cmake version when trying to install h3
+  - h3-py >=3.7.7,<4
   - huggingface_hub
   - matplotlib
   - numpy
@@ -15,12 +17,13 @@ dependencies:
 
     # Only install with pip as a fallback
   - pip:
-    - anemoi_inference==0.4.9
-    - anemoi_models==0.3.1
-    - anemoi_transform==0.1.0
-    - anemoi_utils==0.4.9
-    - earthkit_data==0.11.4
-    - earthkit_meteo==0.3.0
+    - anemoi_datasets==0.5.23
+    - anemoi_graphs==0.6.0
+    - anemoi_inference==0.6.0
+    - anemoi_models==0.6.0
+    - anemoi_transform==0.1.11
+    - anemoi_utils==0.4.28
+    - earthkit_meteo==0.4.1
     - earthkit_regrid==0.4.0
 
 # anemoi deps - prefer using conda to pip
