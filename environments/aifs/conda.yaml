@@ -1,12 +1,20 @@
 channels:
+  - https://software.repos.intel.com/python/conda
   - conda-forge
+#  - https://software.repos.intel.com/python/conda
 dependencies:
-  - cuda
-  - cuda-version=12.8
+#  - cuda
+#  - cuda-version=12.8
   - ecmwf-opendata=0.3.20
   - earthkit-data=0.15.0
   - earthkit-utils=0.0.1
-  - flash-attn=2.7.2
+#  - flash-attn=2.7.4
+#  - flash-attn
+#  - flash-attn=2.7.2
+  - intel-extension-for-pytorch=2.6.0
+  - oneccl_bind_pt=2.6.0
+# The GNU C++ Runtime Library to solve `/system/lib64/libstdc++.so.6: version `GLIBCXX_3.4.29'` not found error
+#  - libstdcxx-ng
 # h3 is anemoi_graphs dependency. We only need the python-binding and so h3-py. pip has problem with cmake version when trying to install h3
   - h3-py >=3.7.7,<4
   - huggingface_hub
@@ -22,9 +30,15 @@ dependencies:
     - anemoi_inference==0.6.0
     - anemoi_models==0.6.0
     - anemoi_transform==0.1.11
-    - anemoi_utils==0.4.28
+    - anemoi_utils==0.4.22
     - earthkit_meteo==0.4.1
     - earthkit_regrid==0.4.0
+#    - --extra-index-url https://download.pytorch.org/whl/cpu
+#    - torch==2.6.0+cpu
+#    - --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/cpu/us/
+#    - intel-extension-for-pytorch==2.6.0+cpu
+#    - flash-attn
+
 
 # anemoi deps - prefer using conda to pip
   - aniso8601
@@ -52,6 +66,7 @@ dependencies:
     # - pdbufr # not recognised by pip packages
   - pydantic
   - pytorch
+#  - pytorch>=2.6,<2.7
   - pytorch_geometric >=2.3,<2.5
   - pyyaml
   - referencing
