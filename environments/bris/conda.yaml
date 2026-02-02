@@ -1,0 +1,123 @@
+channels:
+  - conda-forge
+  - pyg
+dependencies:
+  - cuda
+#  - cuda-version=11.6
+  - cuda-version=12.8
+  - ecmwf-opendata=0.3.20
+  - earthkit-data=0.15.0
+  - earthkit-utils=0.0.1
+  - flash-attn=2.7.2
+# h3 is anemoi_graphs dependency. We only need the python-binding and so h3-py. pip has problem with cmake version when trying to install h3
+  - h3-py >=3.7.7,<4
+  - huggingface_hub
+  - matplotlib
+  - numpy
+  - pip
+  - python
+
+    # Only install with pip as a fallback
+  - pip:
+    - anemoi_datasets==0.5.27
+    - anemoi_graphs==0.6.6
+    - anemoi_inference==0.7.3
+    - anemoi_models==0.9.5
+    - anemoi_transform==0.1.17
+    - anemoi_utils==0.4.36
+    - anemoi_training==0.6.5
+    - earthkit_meteo==0.4.1
+    - earthkit_regrid==0.4.0
+    - HolisticTraceAnalysis
+    - ai_models>=0.7
+    - earthkit_plots
+    - nvsmi
+    - mir-python>=1.27.4.dev20250905
+    - anemoi_plugins_ecmwf_inference
+    - anemoi_plugins
+    - /scratch/dx2/jl8309/aifs_scripts_add_bris_inference/anemoi-plugins/anemoi-inference-output-example-plugin
+#    - torch_cluster
+
+# anemoi deps - prefer using conda to pip
+  - aniso8601
+  - anytree
+  - array-api-compat
+  - attrs
+  - cartopy
+  - cfgrib
+  - cfunits
+  - dask
+    # - eccodes >2.38 # not recognised by pip packages
+  - einops
+  - entrypoints
+  - findlibs
+  - gitdb
+  - gitpython
+  - hydra-core
+  - joblib
+  - jsonschema
+  - jsonschema-specifications
+  - lru-dict
+  - markdown
+  - netcdf4
+  - packaging
+    # - pdbufr # not recognised by pip packages
+  - pydantic
+  - pytorch
+  - pytorch_geometric >=2.3,<2.5
+  - pyyaml
+  - referencing
+  - rpds-py
+  - scikit-learn
+  - semantic_version
+  - smmap <6
+  - termcolor
+  - threadpoolctl
+  - tqdm
+  - wcwidth
+  - xarray
+    # anemoi-training
+  - datashader
+  - mlflow
+  - pynvml
+  - pyshtools
+  - pytorch-lightning
+  - timm
+  - torchinfo
+  - zarr
+  - distinctipy
+  - pandas
+  - rich
+  - tabulate
+  - tensorboard
+    # anemoi-graph
+  - healpy
+  - networkx
+  - plotly
+  - trimesh
+  - typeguard
+#  - pytorch-cluster  
+    # anemoi-inference
+  - omegaconf >=2.2,<2.4
+    # anemoi-models
+  - jinja2
+  - cloudpickle
+    # anemoi-utils
+  - deprecation
+  - multiurl
+  - python-dateutil
+  - requests
+  - obstore
+  - termcolor
+  - wcwidth 
+  - ecmwf-api-client
+    # bom-verification
+  - scores
+    # try met-view for interpolation
+  - metview
+  - metview-python
+  - cdsapi
+    # for testing
+  - pytest-cov
+  - pytest-mock
+  - pytest-xdist
