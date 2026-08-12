@@ -19,7 +19,7 @@ dependencies:
 
     # Only install with pip as a fallback
   - pip:
-    - anemoi_datasets==0.5.27
+    - anemoi_datasets==0.5.29
     - anemoi_graphs==0.6.6
     - anemoi_inference==0.7.3
     - anemoi_models==0.9.5
