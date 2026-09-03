@@ -30,7 +30,7 @@ if ! [[ -v NGMOENVS_DEBUG ]]; then
         -N "ngmoenvs1-$ENVIRONMENT" \
         -q copyq \
         -l ncpus=1 \
-        -l walltime=1:30:00 \
+        -l walltime=3:00:00 \
         -l mem=32gb \
         "${QSUB_FLAGS[@]}" \
         -W block=true \

@@ -1,0 +1,157 @@
+channels:
+  - conda-forge
+  - pyg
+
+dependencies:
+  # Source tags used below:
+  # [T] anemoi-core/training/pyproject.toml
+  # [M] anemoi-core/models/pyproject.toml
+  # [G] anemoi-core/graphs/pyproject.toml
+  # [I] anemoi-inference/pyproject.toml
+  # [D] anemoi-datasets/pyproject.toml
+  # [L] legacy or local-project-specific dependency from previous env file
+  # [C] conflict resolved using your priority: T > M > G > I > D
+  # [U] not sure / solver-risk / platform-availability uncertainty
+
+  # GPU stack policy
+  # [U] pip-managed GPU torch stack is used to align with the custom flash-attn wheel.
+  # [U] conda cuda/cuda-version pins are intentionally omitted to avoid mixed conda/pip torch runtimes.
+
+  # Base runtime
+  - python=3.12.*  # [T][M][G][I][D] pinned for cp312 flash-attn wheel compatibility
+  - pip  # [T][M][G][I][D] required for pip-only and local source installs
+
+  # Core anemoi compulsory dependencies (prefer conda resolution)
+  - numpy>=1.26  # [G][C] raised floor from broad numpy usage across all projects
+  - einops>=0.6.1  # [T][M]
+  - hydra-core>=1.3  # [T][M][G]
+  - pydantic>=2.9  # [T][I][D][C] highest floor from training
+  - pyyaml  # [I][D]
+  - tqdm>=4.65  # [T]
+
+  # Torch stack is installed by pip (CUDA wheels), not conda
+
+  # Numerics / science
+  - scipy>=1.6  # [M][G]
+  - scikit-learn>=1.5  # [G]
+  - numba  # [T]
+  - zarr>=2.14.2,<=2.18.7  # [T][D][C] conflict resolved by intersection
+  - numcodecs<0.16  # [D]
+
+  # Inference / datasets compulsory
+  - aniso8601  # [I]
+  - anytree  # [I]
+  - deprecation  # [I]
+  - earthkit-data>=0.19,<1  # [I] satisfies runtime and netcdf-extra floors from inference
+  - eccodes>=2.38.3  # [I]
+  - omegaconf>=2.2,<2.4  # [I]
+  - packaging  # [I]
+  - rich>=13.6  # [I][D][T] includes training profile minimum
+  - semantic_version  # [I][D]
+  - glom  # [D]
+  - lru-dict  # [D]
+  - pint  # [D]
+  - psutil  # [D]
+  - ruamel.yaml>=0.16  # [D] conda package name uses dot
+
+  # Graphs compulsory
+  - matplotlib>=3.6  # [G]
+  - networkx>=3.1  # [G]
+  - plotly>=5.19  # [G]
+  - typeguard>=4  # [G]
+
+  # anemoi-utils extras requested by training/inference/datasets paths
+  - mlflow  # [T] via anemoi-utils[mlflow]
+  - obstore  # [T] via anemoi-utils[s3]
+  - requests  # [I][D] and anemoi-utils[text]
+  - cloudpickle  # [L] commonly needed with anemoi-models workflows
+  - python-dateutil  # [L] common transitive util lock-in aid
+
+  # Training profiling / diagnostics dependencies
+  - nvidia-ml-py>=13.580.82  # [T]
+  - pandas>=1.3.2  # [T] optional-dependency profile minimum
+  - tabulate>=0.9  # [T] optional-dependency profile minimum
+  - mpmath  # [U] required by sympy, which torch/torch_geometric imports at runtime
+  - sympy  # [U] explicit runtime dependency for pip torch stack
+
+  # Local/project-specific and previously present dependencies
+  - ecmwf-opendata=0.3.20  # [L] project workflow specific, not compulsory in listed pyprojects
+  - earthkit-utils=0.0.1  # [L] project workflow specific
+  # h3 is used to avoid pip h3 build problems in some setups
+  - h3-py>=3.7.7,<4  # [L][U] G optional dependency is h3>=4 (different package naming)
+  - huggingface_hub  # [L] useful for model artifact workflows, not compulsory
+  - cartopy  # [L] plotting/verification workflow specific
+  - cfgrib  # [L] GRIB workflow specific
+  - cfunits  # [D] datasets dependency
+  - dask  # [L] workflow specific
+  - entrypoints  # [L] compatibility helper for older tooling
+  - findlibs  # [L] local runtime helper
+  - gitdb  # [L] transitive with gitpython
+  - gitpython  # [L] workflow specific
+  - joblib  # [L] workflow specific
+  - jsonschema  # [D]
+  - jsonschema-specifications  # [L] jsonschema transitive helper
+  - markdown  # [L] report/render helper
+  - netcdf4  # [L] xarray/io workflow specific
+  - referencing  # [L] jsonschema transitive helper
+  - rpds-py  # [L] jsonschema transitive helper
+  - smmap<6  # [L] gitdb/gitpython compatibility pin
+  - termcolor  # [L]
+  - threadpoolctl  # [L]
+  - wcwidth  # [L]
+  - xarray  # [L] dataset/io workflow specific
+  - datashader  # [L] plotting extras
+  - pynvml  # [L][U] potentially redundant with nvidia-ml-py
+  - pyshtools  # [L] plotting/training optional ecosystem
+  - distinctipy  # [L] plotting helper
+  - tensorboard  # [L] training monitoring helper
+  - healpy  # [L] graphs optional (healpix)
+  - trimesh  # [L] graphs optional (tri)
+  - jinja2  # [M] required for anemoi-models[migrations]
+  - multiurl  # [L] utility workflow specific
+  - ecmwf-api-client  # [L] workflow specific
+  - scores  # [L] verification workflow specific
+  # - metview  # [L][U] heavy package; solver/platform sensitivity
+  # - metview-python  # [L][U] may duplicate functionality if metview is already present
+  - cdsapi  # [L] data access workflow specific
+
+  # Testing tools (not compulsory runtime for training)
+  - pytest-cov  # [L] candidate remove if this env is runtime-only
+  - pytest-mock  # [L] candidate remove if this env is runtime-only
+  - pytest-xdist  # [L] candidate remove if this env is runtime-only
+
+  # Pip-installed packages
+  - pip:
+    # Install from local anemoi-core source tree (as requested)
+    - git+https://github.com/ecmwf/anemoi-core.git#subdirectory=training  # [T][U] install latest training development version from upstream
+
+    # Remaining anemoi packages not installed from local anemoi-core tree
+    - anemoi-datasets>=0.5.34  # [T][D][C] training imposes higher floor than datasets baseline
+    - anemoi-graphs>=0.9.4  # [M][C] release package per pyprojects, not local source
+    - anemoi-inference>=0.7.3  # [I]
+    - anemoi-models[migrations]>=0.9.5  # [T][M][C] release package per pyprojects, not local source
+    - anemoi-transform>=0.4.1  # [T][C] conflict resolved over I (>0.1.13) and D (>=0.4)
+    - anemoi-utils[mlflow,provenance,s3,text]>=0.5.1  # [T][I][D][C]
+    - pyodc>=1.6  # [D][U] pip fallback because conda package not found in selected channels
+    - --extra-index-url https://download.pytorch.org/whl/cu126  # [U] select CUDA 12.6 PyTorch wheels
+    - -f https://data.pyg.org/whl/torch-2.7.0+cu126.html  # [U] PyG compiled extension wheels matching torch/cu126
+    - torch==2.7.0+cu126  # [T][M][G][I][C] satisfies torch constraints and matches flash-attn wheel family
+    - torchvision==0.22.0+cu126  # [T][U] paired with torch 2.7.x CUDA wheel family
+    - torch-geometric>=2.3.1  # [T][G] pip package name for torch-geometric
+    - pytorch-lightning>=2.1  # [T]
+    - timm>=0.9.2  # [T]
+    - torchinfo>=1.8  # [T]
+
+    # Existing project-specific pip dependencies kept from prior file
+    - https://github.com/cathalobrien/get-flash-attn/releases/download/v0.1-alpha/flash_attn-2.7.4.post1+cu12torch2.7cxx11abiFALSE-cp312-cp312-linux_x86_64.whl  # [L][U] pinned custom flash-attn wheel
+    - earthkit_meteo==0.4.1  # [L]
+    - earthkit_regrid==0.4.0  # [L]
+    - HolisticTraceAnalysis>=0.2  # [T] optional profile dependency minimum
+    # - ai_models>=0.7  # [L] project-specific
+    - earthkit_plots<1  # [L] visualization helper
+    - nvsmi  # [L] GPU/system monitoring helper
+    # - mir-python>=1.27.4.dev20250905  # [L] workflow-specific pin
+    # - anemoi_plugins_ecmwf_inference  # [L] plugin integration
+    # - anemoi_plugins  # [L] plugin base
+    # - /scratch/dx2/jl8309/aifs_scripts_add_bris_inference/anemoi-plugins/anemoi-inference-output-example-plugin  # [L] local plugin path
+    # - torch_cluster  # [L] optional; left disabled as before
