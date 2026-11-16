@@ -1,0 +1,166 @@
+channels:
+  - conda-forge
+  - pyg
+
+dependencies:
+  # Source tags used below:
+  # [T] anemoi-core/training/pyproject.toml
+  # [M] anemoi-core/models/pyproject.toml
+  # [G] anemoi-core/graphs/pyproject.toml
+  # [I] anemoi-inference/pyproject.toml
+  # [D] anemoi-datasets/pyproject.toml
+  # [L] legacy or local-project-specific dependency from previous env file
+  # [C] conflict resolved using your priority: T > M > G > I > D
+  # [U] not sure / solver-risk / platform-availability uncertainty
+
+  # GPU stack policy
+  # [U] pip-managed GPU torch stack (torch 2.6.0+cu124) aligns with bris-forecaster pyproject.toml.
+  # [U] Conda cuda/cuda-version pins are intentionally omitted to avoid mixed conda/pip torch runtimes.
+  # [U] This follows the fastnet lesson: pip GPU stack avoids conda CPU torch fallback and ensures ABI consistency.
+
+  # Base runtime
+  - python=3.12.*  # [T][M][G][I][D] pinned to 3.12.x for torch 2.6.0+cu124 wheel compatibility and consistency with bris pyproject
+  - pip  # [T][M][G][I][D] required for pip-only and local source installs
+
+  # Core anemoi compulsory dependencies (prefer conda resolution)
+  - numpy>=1.26  # [G][C] raised floor from broad numpy usage across all projects
+  - einops>=0.6.1  # [T][M]
+  - hydra-core>=1.3  # [T][M][G]
+  - pydantic>=2.9  # [T][I][D][C] highest floor from training
+  - pyyaml  # [I][D]
+  - tqdm>=4.65  # [T]
+
+  # Torch stack is installed by pip (CUDA wheels), not conda
+
+  # Numerics / science
+  - scipy>=1.6  # [M][G]
+  - scikit-learn>=1.5  # [G]
+  - numba  # [T]
+  - zarr>=2.14.2,<=2.18.7  # [T][D][C] conflict resolved by intersection
+  - numcodecs<0.16  # [D]
+
+  # Inference / datasets compulsory
+  - aniso8601  # [I]
+  - anytree  # [I]
+  - deprecation  # [I]
+  - earthkit-data==0.15.0  # [I] pinned from bris-forecaster pyproject.toml
+  - eccodes>=2.38.3  # [I]
+  - omegaconf>=2.2,<2.4  # [I]
+  - packaging  # [I]
+  - rich>=13.6  # [I][D][T] includes training profile minimum
+  - semantic_version  # [I][D]
+  - glom  # [D]
+  - lru-dict  # [D]
+  - pint  # [D]
+  - psutil  # [D]
+  - ruamel.yaml>=0.16  # [D] conda package name uses dot
+
+  # Graphs compulsory
+  - matplotlib>=3.7.1  # [T][G] raised from 3.6 to satisfy anemoi-training requirement
+  - networkx>=3.1  # [G]
+  - plotly>=5.19  # [G]
+  - typeguard>=4  # [G]
+
+  # anemoi-utils extras requested by training/inference/datasets paths
+  - mlflow>=2.11.1  # [T] full mlflow with UI (training requires mlflow-skinny>=2.11.1, but mlflow includes all features)
+  - obstore  # [T] via anemoi-utils[s3]
+  - requests  # [I][D] and anemoi-utils[text]
+  - cloudpickle  # [L] commonly needed with anemoi-models workflows
+  - python-dateutil  # [L] common transitive util lock-in aid
+
+  # Training profiling / diagnostics dependencies
+  - nvidia-ml-py>=13.580.82  # [T]
+  - pandas>=1.3.2  # [T] optional-dependency profile minimum
+  - tabulate>=0.9  # [T] optional-dependency profile minimum
+  - mpmath  # [U] required by sympy, which torch/torch_geometric imports at runtime
+  - sympy  # [U] explicit runtime dependency for pip torch stack (torch 2.6.0+cu124)
+  - numpy>=1.26  # [G] moved up in priority; bris pyproject uses numpy==1.26.4
+
+  # Local/project-specific and previously present dependencies
+  # Note: bris-forecaster includes several non-core packages for inference and diagnostics
+  - ecmwf-opendata=0.3.20  # [L] project workflow specific
+  - earthkit-utils=0.0.1  # [L] project workflow specific
+  # h3 is used to avoid pip h3 build problems in some setups
+  - h3-py>=3.7.7,<4  # [L][U] G optional dependency is h3>=4 (different package naming)
+  - huggingface_hub  # [L] useful for model artifact workflows, not compulsory
+  - cartopy  # [L] plotting/verification workflow specific
+  - cfgrib  # [L] GRIB workflow specific
+  - cfunits  # [D] datasets dependency
+  - dask  # [L] workflow specific
+  - datashader>=0.17  # [T][L] version constraint for Python 3.10+; training requires >=0.17 for py3.10+
+  - entrypoints  # [L] compatibility helper for older tooling
+  - findlibs  # [L] local runtime helper
+  - gitdb  # [L] transitive with gitpython
+  - gitpython  # [L] workflow specific
+  - joblib  # [L] workflow specific
+  - jsonschema  # [D]
+  - jsonschema-specifications  # [L] jsonschema transitive helper
+  - markdown  # [L] report/render helper
+  - netcdf4  # [L] xarray/io workflow specific
+  - referencing  # [L] jsonschema transitive helper
+  - rpds-py  # [L] jsonschema transitive helper
+  - smmap<6  # [L] gitdb/gitpython compatibility pin
+  - termcolor  # [L]
+  - threadpoolctl  # [L]
+  - wcwidth  # [L]
+  - xarray  # [L] dataset/io workflow specific
+  - datashader  # [L] plotting extras
+  - pynvml  # [L][U] potentially redundant with nvidia-ml-py
+  - pyshtools  # [L] plotting/training optional ecosystem
+  - distinctipy  # [L] plotting helper
+  - tensorboard  # [L] training monitoring helper
+  - healpy  # [L] graphs optional (healpix)
+  - trimesh  # [L] graphs optional (tri)
+  - jinja2  # [M] required for anemoi-models[migrations]
+  - multiurl  # [L] utility workflow specific
+  - ecmwf-api-client  # [L] workflow specific
+  - scores  # [L] verification workflow specific
+  # - metview  # [L][U] heavy package; solver/platform sensitivity
+  # - metview-python  # [L][U] may duplicate functionality if metview is already present
+  - cdsapi  # [L] data access workflow specific
+
+  # Testing tools (not compulsory runtime for training)
+  - pytest-cov  # [L] candidate remove if this env is runtime-only
+  - pytest-mock  # [L] candidate remove if this env is runtime-only
+  - pytest-xdist  # [L] candidate remove if this env is runtime-only
+
+  # Pip-installed packages
+  - pip:
+    # anemoi-training from forked branch to support CRPS FFT loss training
+    # The forked anemoi-core:feat/crps-fft-loss branch provides CRPSFFTLoss (in training/src/anemoi/training/losses/afcrps_fft.py)
+    # Training requires: anemoi-datasets>=0.5.13, anemoi-graphs>=0.5.2, anemoi-models[migrations]>=0.9.5, anemoi-transform>=0.1.11, anemoi-utils[provenance,mlflow]>=0.4.32
+    - git+https://github.com/evenmn/anemoi-core.git@feat/crps-fft-loss#subdirectory=training  # [T][L] forked training with CRPS FFT loss
+
+    # Remaining anemoi packages from PyPI (compatible with forked training requirements)
+    - anemoi-datasets==0.5.29  # [U] updated from 0.5.24 from bris pyproject for meeting dataset requirements; satisfies training >=0.5.13
+    - anemoi-graphs==0.6.2  # [G] satisfies training requirement >=0.5.2 (0.6.2 from bris pyproject is compatible)
+    - anemoi-inference==0.7.3  # [I] inference package for post-training workflows
+    - anemoi-models==0.9.5  # [M] updated to satisfy training requirement >=0.9.5 (was 0.8.1 in bris)
+    - anemoi-transform==0.1.14  # [T] updated from 0.1.11 from bris pyproject to satisfy anemoi-dataset 0.5.29
+    - anemoi-utils[provenance,mlflow]>=0.4.32,<=0.4.36  # [U] updated to satisfy training requirement >=0.4.32; extras for provenance tracking and mlflow integration
+    - pyodc>=1.6  # [D][U] pip fallback because conda package not found in selected channels
+    
+    # PyTorch GPU stack from bris-forecaster pyproject.toml
+    # These are installed via pip to avoid conda CPU torch fallback (learned from fastnet)
+    - --extra-index-url https://download.pytorch.org/whl/cu124  # [U] select CUDA 12.4 PyTorch wheels
+    - -f https://data.pyg.org/whl/torch-2.6.0+cu124.html  # [U] PyG compiled extension wheels for torch 2.6.0+cu124
+    - torch==2.6.0+cu124  # [T][L] pinned from bris-forecaster pyproject.toml (cu124, not cu126)
+    - torchvision==0.21.0+cu124  # [T][L] pinned from bris pyproject, paired with torch 2.6.0+cu124
+    - torchaudio==2.6.0+cu124  # [T][L] pinned from bris pyproject for consistency
+    - torch-geometric==2.6.1  # [G][L] pinned from bris pyproject (not flexible version)
+    - pytorch-lightning==2.5.2  # [T][L] pinned from bris pyproject
+    - timm==1.0.16  # [T][L] pinned from bris pyproject
+    - torchinfo==1.8.0  # [T][L] pinned from bris pyproject
+    - torchmetrics==1.7.3  # [T][L] pinned from bris uv.lock (pytorch-lightning dependency)
+    - triton==3.2.0  # [T][L] explicitly pinned from bris pyproject (needed for torch 2.6.0 cuda ops)
+    - earthkit_meteo==0.4.1  # [L] from bris pyproject
+    - earthkit_regrid==0.4.0  # [L] from bris pyproject
+    - HolisticTraceAnalysis>=0.2  # [T] optional profile dependency for anemoi-training
+    - nvsmi  # [L] GPU/system monitoring helper
+    # - mir-python>=1.27.4.dev20250905  # [L] workflow-specific pin
+    # - anemoi_plugins_ecmwf_inference  # [L] plugin integration
+    # - anemoi_plugins  # [L] plugin base
+    - /g/data/dx2/jl8309/anemoi-inference-plugins-bom  # [L] local plugin path for xarray output
+    # - torch_cluster  # [L] optional; left disabled as before
+    - earthkit-utils==0.0.1 # make sure pip does not upgrade
+    - earthkit-data==0.15.0 # make sure pip does not upgrade
