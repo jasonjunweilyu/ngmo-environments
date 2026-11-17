@@ -54,8 +54,8 @@ dependencies:
   - earthkit-plots<1 # on conda-pypi
   - matplotlib<3.11
 #  - eckitlib<2.3.0.28 # c++ library not on conda, not needed now because of not needing MIR
-  - metview-batch
-  - metview-python
+  - metview-batch # backend for MIR, eckit, Metview C++
+  - metview-python # python interface for metview and its MIR, eckit
 
   # AIFS_scripts inference workflow
   - ecmwf-opendata=0.3.20  # opendata IC download
